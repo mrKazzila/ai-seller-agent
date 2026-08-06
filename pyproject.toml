@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-seller-agent"
+version = "0.0.1"
+description = "Test task AI agent"
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.139.2",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
+    "structlog>=25.5.0",
+    "uvicorn>=0.51.0",
+    "uvloop>=0.22.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "ruff>=0.15.12",
+    "ty>=0.0.34",
+]
+
+[project.scripts]
+agent = "ai_seller_agent.main:main"
+
+# ==========================
+# ========= PyTest =========
+# ==========================
+[tool.pytest.ini_options]
+addopts = "-v -ra --import-mode=importlib"
+testpaths = ["tests"]
+pythonpath = ["src"]
+strict_markers = true
+strict_config = true
+
+
+# ==========================
+# ========= Ruff ===========
+# ==========================
+[tool.ruff]
+respect-gitignore = true
+line-length = 79
+target-version = "py312"
+src = ["src"]
+extend-exclude = ["tests"]
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+select = [
+    "I",
+    "A",
+    "F",
+    "E",
+    "W",
+    "N",
+    "Q",
+    "UP",
+    "PT",
+    "C4",
+    "ERA",
+    "RET",
+    "ARG",
+    "PTH",
+    "FLY",
+    "ANN",
+    "COM",
+    "G001",
+]
+ignore = [
+    "ANN002",
+    "ANN003",
+    "ANN201",
+    "ANN202",
+    "ANN401",
+    "PT007",
+]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = false
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = true
+combine-as-imports = true
+lines-between-types = 0
+known-first-party = ["ai_seller_agent", "tests"]
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+multiline-quotes = "double"
+docstring-quotes = "double"
+
+
+# ==========================
+# ====== Ty ========
+# ==========================
+[tool.ty.terminal]
+output-format = "concise"
+error-on-warning = false
+
+[tool.ty.environment]
+python-version = "3.12"
+root = ["./src"]
+
+[tool.ty.src]
+include = ["src"]
+exclude = [
+    ".venv/**",
+    "env/**",
+    "docs/**",
+]
