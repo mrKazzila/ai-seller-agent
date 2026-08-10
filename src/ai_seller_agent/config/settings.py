@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from ai_seller_agent.config.logging import LogLevel, LogRenderer
@@ -13,7 +13,7 @@ class MatchingSettings(BaseModel):
     match_threshold: float = 0.82
     candidate_threshold: float = 0.50
     minimum_margin: float = 0.10
-    candidates_limit: int = 5
+    candidates_limit: int = Field(default=3, ge=2, le=3)
 
     tfidf_weight: float = 0.60
     fuzzy_weight: float = 0.25

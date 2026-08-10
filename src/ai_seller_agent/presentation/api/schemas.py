@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from pydantic import BaseModel, Field
 
 from ai_seller_agent.domain.enums import MatchStatus
@@ -7,43 +5,37 @@ from ai_seller_agent.domain.models import MatchResult
 
 
 class MatchRequest(BaseModel):
-    message: str = Field(min_length=1, max_length=2_000)
-
-
-class ProductResponse(BaseModel):
-    sku: str
-    name: str
-    unit: str
-    price: Decimal
+    messages: list[str]
 
 
 class CandidateResponse(BaseModel):
-    product: ProductResponse
-    score: float = Field(ge=0, le=1)
+    sku: str
+    confidence: float = Field(ge=0, le=1)
 
 
-class MatchResponse(BaseModel):
+class MessageMatchResponse(BaseModel):
+    message: str
     status: MatchStatus
-    candidates: list[CandidateResponse]
-    reason: str | None = None
-    missing_attributes: list[str] = []
+    candidates: list[CandidateResponse] = Field(default_factory=list)
 
     @classmethod
-    def from_domain(cls, result: MatchResult) -> "MatchResponse":
+    def from_domain(
+        cls,
+        message: str,
+        result: MatchResult,
+    ) -> "MessageMatchResponse":
         return cls(
+            message=message,
             status=result.status,
             candidates=[
                 CandidateResponse(
-                    product=ProductResponse(
-                        sku=candidate.product.sku,
-                        name=candidate.product.name,
-                        unit=candidate.product.unit,
-                        price=candidate.product.price,
-                    ),
-                    score=round(candidate.score, 4),
+                    sku=candidate.product.sku,
+                    confidence=round(candidate.score, 4),
                 )
                 for candidate in result.candidates
             ],
-            reason=result.reason,
-            missing_attributes=list(result.missing_attributes),
         )
+
+
+class MatchResponse(BaseModel):
+    results: list[MessageMatchResponse]

@@ -43,7 +43,7 @@ class ProductMatcher:
 
         if not query:
             return MatchResult(
-                status=MatchStatus.NON_PRODUCT,
+                status=MatchStatus.NOT_FOUND,
                 reason="Message is empty after normalization",
             )
 
@@ -99,6 +99,9 @@ class ProductMatcher:
         )
 
         if top.score < self._settings.match_threshold:
+            if len(selected) < 2:
+                return MatchResult(status=MatchStatus.NOT_FOUND)
+
             return MatchResult(
                 status=MatchStatus.AMBIGUOUS,
                 candidates=selected,
