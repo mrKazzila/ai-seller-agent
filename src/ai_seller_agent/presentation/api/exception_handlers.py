@@ -1,5 +1,8 @@
+import structlog
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
+
+logger = structlog.get_logger(__name__)
 
 
 class ApplicationError(Exception):
@@ -20,6 +23,10 @@ def setup_exception_handlers(app: FastAPI) -> None:
         _request: Request,
         exc: CatalogError,
     ) -> JSONResponse:
+        logger.error(
+            "catalog_request_failed",
+            exc_info=(type(exc), exc, exc.__traceback__),
+        )
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
@@ -33,6 +40,10 @@ def setup_exception_handlers(app: FastAPI) -> None:
         _request: Request,
         exc: MatchingError,
     ) -> JSONResponse:
+        logger.error(
+            "matching_request_failed",
+            exc_info=(type(exc), exc, exc.__traceback__),
+        )
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
@@ -46,6 +57,10 @@ def setup_exception_handlers(app: FastAPI) -> None:
         _request: Request,
         exc: ApplicationError,
     ) -> JSONResponse:
+        logger.error(
+            "application_request_failed",
+            exc_info=(type(exc), exc, exc.__traceback__),
+        )
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
