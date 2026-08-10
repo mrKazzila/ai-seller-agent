@@ -6,10 +6,10 @@ from fastapi import APIRouter, Depends
 from ai_seller_agent.domain.enums import MatchStatus
 from ai_seller_agent.matching.matcher import ProductMatcher
 from ai_seller_agent.presentation.api.dependencies import get_matcher
+from ai_seller_agent.presentation.api.mappers import map_message_match_response
 from ai_seller_agent.presentation.api.schemas import (
     MatchRequest,
     MatchResponse,
-    MessageMatchResponse,
 )
 
 router = APIRouter(prefix="/match", tags=["Matching"])
@@ -22,7 +22,7 @@ def match_product(
     matcher: Annotated[ProductMatcher, Depends(get_matcher)],
 ) -> MatchResponse:
     results = [
-        MessageMatchResponse.from_domain(message, matcher.match(message))
+        map_message_match_response(message, matcher.match(message))
         for message in payload.messages
     ]
     logger.info(

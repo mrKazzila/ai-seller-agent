@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field
 
 from ai_seller_agent.domain.enums import MatchStatus
-from ai_seller_agent.domain.models import MatchResult
 
 
 class MatchRequest(BaseModel):
@@ -17,24 +16,6 @@ class MessageMatchResponse(BaseModel):
     message: str
     status: MatchStatus
     candidates: list[CandidateResponse] = Field(default_factory=list)
-
-    @classmethod
-    def from_domain(
-        cls,
-        message: str,
-        result: MatchResult,
-    ) -> "MessageMatchResponse":
-        return cls(
-            message=message,
-            status=result.status,
-            candidates=[
-                CandidateResponse(
-                    sku=candidate.product.sku,
-                    confidence=round(candidate.score, 4),
-                )
-                for candidate in result.candidates
-            ],
-        )
 
 
 class MatchResponse(BaseModel):
