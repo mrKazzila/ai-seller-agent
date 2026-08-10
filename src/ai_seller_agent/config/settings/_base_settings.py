@@ -1,29 +1,11 @@
-from pathlib import Path
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 __all__ = ("BaseAppSettings",)
 
 
-def _find_project_root(start: Path) -> Path:
-    start = start.resolve()
-    current = start.parent if start.is_file() else start
-
-    for path in (current, *current.parents):
-        if (path / "pyproject.toml").exists():
-            return path
-
-    msg = "Project root not found"
-    raise RuntimeError(msg)
-
-
-PROJECT_ROOT = _find_project_root(Path(__file__))
-_ENV_FILE_PATH = PROJECT_ROOT / "env" / ".env"
-
-
 class BaseAppSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=_ENV_FILE_PATH,
+        env_file="env/.env",
         env_file_encoding="utf-8",
         env_prefix="AI_SELLER_",
         env_nested_delimiter="__",

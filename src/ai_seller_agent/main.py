@@ -15,6 +15,6 @@ def main() -> None:
         "ai_seller_agent.main:app",
         host=settings.app.host,
         port=settings.app.port,
-        reload=True,
+        reload=settings.app.reload,
         log_config=None,
     )
