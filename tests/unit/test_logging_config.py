@@ -1,12 +1,15 @@
 import logging
 from typing import cast
 
+import pytest
+
 from ai_seller_agent.config.logging import LoggingConfig, LogLevel
-from ai_seller_agent.config.settings import Settings
+from ai_seller_agent.config.settings import AppSettings
 
 
+@pytest.mark.unit
 def test_logging_config_from_settings() -> None:
-    settings = Settings(
+    settings = AppSettings(
         log_level="DEBUG",
         log_renderer="console",
         enable_log_diagnostics=True,
@@ -22,6 +25,7 @@ def test_logging_config_from_settings() -> None:
     assert config.resolved_level() == logging.DEBUG
 
 
+@pytest.mark.unit
 def test_unknown_log_level_falls_back_to_info() -> None:
     config = LoggingConfig(level=cast(LogLevel, "unknown"))
 

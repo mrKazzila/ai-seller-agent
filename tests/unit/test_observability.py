@@ -1,30 +1,15 @@
 import json
 import logging
-from collections.abc import Iterator
 
 import pytest
 import structlog
 
 from ai_seller_agent.config.logging import LoggingConfig
-from ai_seller_agent.observability import reset_logging, setup_logging
+from ai_seller_agent.observability import setup_logging
 
 
-@pytest.fixture(autouse=True)
-def restore_logging_state() -> Iterator[None]:
-    root = logging.getLogger()
-    original_handlers = root.handlers[:]
-    original_level = root.level
-    httpx_logger = logging.getLogger("httpx")
-    original_httpx_level = httpx_logger.level
-
-    yield
-
-    reset_logging()
-    root.handlers = original_handlers
-    root.setLevel(original_level)
-    httpx_logger.setLevel(original_httpx_level)
-
-
+@pytest.mark.unit
+@pytest.mark.usefixtures("restore_logging_state")
 def test_json_renderer_handles_structlog_and_stdlib(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
@@ -41,22 +26,23 @@ def test_json_renderer_handles_structlog_and_stdlib(
         product_id="sku-1",
     )
     logging.getLogger("test.foreign").warning("retry %s", "scheduled")
-
     structured, foreign = [
         json.loads(line) for line in capsys.readouterr().out.splitlines()
     ]
+
     assert structured["event"] == "product_matched"
     assert structured["product_id"] == "sku-1"
     assert structured["logger"] == "test.structured"
     assert structured["level"] == "info"
     assert structured["timestamp"].endswith("Z")
     assert {"module", "func_name", "lineno"} <= structured.keys()
-
     assert foreign["event"] == "retry scheduled"
     assert foreign["logger"] == "test.foreign"
     assert foreign["level"] == "warning"
 
 
+@pytest.mark.unit
+@pytest.mark.usefixtures("restore_logging_state")
 def test_json_traceback_does_not_include_frame_locals(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
@@ -67,14 +53,16 @@ def test_json_traceback_does_not_include_frame_locals(
         raise ValueError("broken")
     except ValueError:
         logger.exception("operation_failed")
-
     event = json.loads(capsys.readouterr().out)
+
     assert event["exception"][0]["exc_type"] == "ValueError"
     assert all(
         "locals" not in frame for frame in event["exception"][0]["frames"]
     )
 
 
+@pytest.mark.unit
+@pytest.mark.usefixtures("restore_logging_state")
 def test_level_filtering_and_noisy_logger_tuning(
     capsys: pytest.CaptureFixture[str],
 ) -> None:
@@ -83,8 +71,8 @@ def test_level_filtering_and_noisy_logger_tuning(
 
     logger.info("hidden_event")
     logger.warning("visible_event")
-
     output = capsys.readouterr().out
+
     assert "hidden_event" not in output
     assert "visible_event" in output
     assert logging.getLogger("httpx").level == logging.WARNING
