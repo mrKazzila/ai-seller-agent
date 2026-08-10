@@ -3,7 +3,8 @@ from ai_seller_agent.config.logging import LoggingConfig
 from ai_seller_agent.config.settings import get_settings
 from ai_seller_agent.observability import setup_logging
 
-setup_logging(LoggingConfig.from_settings(get_settings()))
+settings = get_settings()
+setup_logging(LoggingConfig.from_settings(settings.app))
 app = create_app()
 
 
@@ -12,7 +13,7 @@ def main() -> None:
 
     uvicorn.run(
         "ai_seller_agent.main:app",
-        host="127.0.0.1",
-        port=8000,
+        host=settings.app.host,
+        port=settings.app.port,
         reload=True,
     )

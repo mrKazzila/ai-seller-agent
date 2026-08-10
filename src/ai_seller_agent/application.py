@@ -29,7 +29,7 @@ def create_app() -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        loader = CsvCatalogLoader(settings.catalog_path)
+        loader = CsvCatalogLoader(settings.app.catalog_path)
         catalog = loader.load()
         logger.info("catalog_loaded", product_count=len(catalog))
 
@@ -50,14 +50,14 @@ def create_app() -> FastAPI:
         app.state.matcher = matcher
         logger.info(
             "application_ready",
-            app_version=settings.app_version,
+            app_version=settings.app.version,
         )
 
         yield
 
     app = FastAPI(
-        title=settings.app_name,
-        version=settings.app_version,
+        title=settings.app.name,
+        version=settings.app.version,
         lifespan=lifespan,
     )
 
