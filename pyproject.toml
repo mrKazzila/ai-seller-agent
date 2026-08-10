@@ -40,6 +40,11 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 strict_markers = true
 strict_config = true
+markers = [
+    "unit: isolated unit tests",
+    "integration: integration tests across application components",
+    "e2e: end-to-end tests using the complete application stack",
+]
 
 
 # ==========================
