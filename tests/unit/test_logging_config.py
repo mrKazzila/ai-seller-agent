@@ -4,12 +4,12 @@ from typing import cast
 import pytest
 
 from ai_seller_agent.config.logging import LoggingConfig, LogLevel
-from ai_seller_agent.config.settings import Settings
+from ai_seller_agent.config.settings import AppSettings
 
 
 @pytest.mark.unit
 def test_logging_config_from_settings() -> None:
-    settings = Settings(
+    settings = AppSettings(
         log_level="DEBUG",
         log_renderer="console",
         enable_log_diagnostics=True,
