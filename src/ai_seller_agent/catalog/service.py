@@ -1,10 +1,11 @@
+from ai_seller_agent.catalog.exceptions import EmptyCatalogError
 from ai_seller_agent.domain.models import Product
 
 
 class CatalogService:
     def __init__(self, products: tuple[Product, ...]) -> None:
         if not products:
-            raise ValueError("Catalog must not be empty")
+            raise EmptyCatalogError("Catalog must not be empty")
 
         self._products = products
         self._products_by_sku = {product.sku: product for product in products}
