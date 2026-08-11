@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ai_seller_agent.presentation.api.routes.types import CatalogDep
+from ai_seller_agent.presentation.api.routes.types import HealthStatusDep
 from ai_seller_agent.presentation.api.schemas.health import HealthResponse
 
 router = APIRouter(tags=["System"])
@@ -8,9 +8,11 @@ router = APIRouter(tags=["System"])
 
 @router.get("/health")
 def health(
-    catalog: CatalogDep,
+    get_health_status: HealthStatusDep,
 ) -> HealthResponse:
+    result = get_health_status.execute()
+
     return HealthResponse(
-        status="ok",
-        catalog_size=len(catalog),
+        status=result.status,
+        catalog_size=result.catalog_size,
     )

@@ -4,9 +4,9 @@ from decimal import Decimal
 
 import pytest
 
-from ai_seller_agent.config.settings import MatchingSettings
+from ai_seller_agent.domain.matching.policy import MatchPolicy
 from ai_seller_agent.domain.models import Product, ProductCandidate
-from ai_seller_agent.infrastructure.matching.matcher import ProductMatcher
+from ai_seller_agent.infrastructure.matching.scorer import ScoringWeights
 from ai_seller_agent.infrastructure.observability import reset_logging
 
 
@@ -19,6 +19,24 @@ def product() -> Product:
         price=Decimal("1.00"),
     )
 
+
+@pytest.fixture
+def scoring_weights() -> ScoringWeights:
+    return ScoringWeights(
+        tfidf=0.60,
+        fuzzy=0.25,
+        features=0.15,
+    )
+
+
+@pytest.fixture
+def match_policy() -> MatchPolicy:
+    return MatchPolicy(
+        match_threshold=0.82,
+        candidate_threshold=0.50,
+        minimum_margin=0.10,
+        candidates_limit=3,
+    )
 
 @pytest.fixture
 def candidate_factory() -> Callable[[str, float], ProductCandidate]:
@@ -35,12 +53,6 @@ def candidate_factory() -> Callable[[str, float], ProductCandidate]:
 
     return create_candidate
 
-
-@pytest.fixture
-def result_builder() -> ProductMatcher:
-    matcher = object.__new__(ProductMatcher)
-    matcher._settings = MatchingSettings()
-    return matcher
 
 
 @pytest.fixture

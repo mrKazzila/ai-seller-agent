@@ -3,7 +3,7 @@ from fastapi import APIRouter
 
 from ai_seller_agent.domain.enums import MatchStatus
 from ai_seller_agent.presentation.api.mappers.match import to_match_response
-from ai_seller_agent.presentation.api.routes.types import MatcherDep
+from ai_seller_agent.presentation.api.routes.types import MatchMessagesDep
 from ai_seller_agent.presentation.api.schemas.match import (
     MatchRequest,
     MatchResponse,
@@ -16,14 +16,16 @@ logger = structlog.get_logger(__name__)
 @router.post("")
 def match_product(
     payload: MatchRequest,
-    matcher: MatcherDep,
+    match_messages_uc: MatchMessagesDep,
 ) -> MatchResponse:
+    matches = match_messages_uc.execute(messages=payload.messages)
+
     results = [
         to_match_response(
-            message,
-            matcher.match(message=message),
+            match.message,
+            match.result,
         )
-        for message in payload.messages
+        for match in matches
     ]
 
     logger.info(

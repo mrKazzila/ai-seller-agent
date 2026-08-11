@@ -5,14 +5,15 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from ai_seller_agent.presentation.api.application import create_app
+from ai_seller_agent.application.use_cases.match_messages import MatchMessages
 from ai_seller_agent.domain.enums import MatchStatus
 from ai_seller_agent.domain.models import (
     MatchResult,
     Product,
     ProductCandidate,
 )
-from ai_seller_agent.presentation.api.dependencies import get_matcher
+from ai_seller_agent.presentation.api.application import create_app
+from ai_seller_agent.presentation.api.dependencies import get_match_messages
 
 
 class StubMatcher:
@@ -40,7 +41,10 @@ def candidate(sku: str, score: float) -> ProductCandidate:
 
 @pytest.fixture
 def integration_app() -> Iterator[FastAPI]:
-    app = create_app()
+    app = create_app(
+        title="Test application",
+        version="test",
+    )
     matcher = StubMatcher(
         {
             "exact": MatchResult(
@@ -57,7 +61,9 @@ def integration_app() -> Iterator[FastAPI]:
             ),
         },
     )
-    app.dependency_overrides[get_matcher] = lambda: matcher
+
+    use_case = MatchMessages(matcher)
+    app.dependency_overrides[get_match_messages] = lambda: use_case
 
     yield app
 

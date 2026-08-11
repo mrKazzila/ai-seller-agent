@@ -2,8 +2,14 @@ from dataclasses import dataclass
 
 from rapidfuzz import fuzz
 
-from ai_seller_agent.config.settings import MatchingSettings
-from ai_seller_agent.infrastructure.matching.features import TextFeatures
+from ai_seller_agent.domain.matching.features import TextFeatures
+
+
+@dataclass(frozen=True, slots=True)
+class ScoringWeights:
+    tfidf: float
+    fuzzy: float
+    features: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -15,8 +21,8 @@ class ScoreDetails:
 
 
 class ProductScorer:
-    def __init__(self, settings: MatchingSettings) -> None:
-        self._settings = settings
+    def __init__(self, weights: ScoringWeights) -> None:
+        self._weights = weights
 
     def calculate(
         self,
@@ -34,9 +40,9 @@ class ProductScorer:
         )
 
         total = (
-            self._settings.tfidf_weight * tfidf_score
-            + self._settings.fuzzy_weight * fuzzy_score
-            + self._settings.feature_weight * feature_score
+            self._weights.tfidf * tfidf_score
+            + self._weights.fuzzy * fuzzy_score
+            + self._weights.features * feature_score
         )
 
         return ScoreDetails(

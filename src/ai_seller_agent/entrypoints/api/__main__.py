@@ -1,7 +1,8 @@
 from ai_seller_agent.config.logging import LoggingConfig
 from ai_seller_agent.config.settings import get_settings
+from ai_seller_agent.entrypoints.api.bootstrap import create_application
+from ai_seller_agent.entrypoints.api.server import run_app
 from ai_seller_agent.infrastructure.observability import setup_logging
-from ai_seller_agent.presentation.api.application import create_app, run_app
 
 
 def main() -> None:
@@ -9,7 +10,7 @@ def main() -> None:
     settings = get_settings()
     setup_logging(LoggingConfig.from_settings(settings.app))
 
-    app = create_app()
+    app = create_application(settings)
 
     run_app(
         app=app,
