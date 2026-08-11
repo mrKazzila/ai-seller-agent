@@ -1,6 +1,6 @@
 import pytest
 
-from ai_seller_agent.matching.features import FeatureExtractor
+from ai_seller_agent.infrastructure.matching.features import FeatureExtractor
 
 
 @pytest.mark.unit
@@ -20,3 +20,19 @@ def test_extract_measurements(
     features = FeatureExtractor().extract(text)
 
     assert features.measurements == expected
+
+
+@pytest.mark.unit
+def test_extract_product_discriminators() -> None:
+    features = FeatureExtractor().extract(
+        "кабель ввгнг ls 3х1.5 12 в уп 200 шт 48 зубьев",
+    )
+
+    assert features.dimensions == frozenset({"3х1.5"})
+    assert features.package_quantities == frozenset({"200"})
+    assert features.voltages == frozenset({"12"})
+    assert features.tooth_counts == frozenset({"48"})
+    assert features.numeric_values == frozenset(
+        {"1.5", "3", "12", "48", "200"},
+    )
+    assert features.cable_markers == frozenset({"ls"})

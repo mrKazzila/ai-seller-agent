@@ -2,8 +2,8 @@ import csv
 from decimal import Decimal
 from pathlib import Path
 
-from ai_seller_agent.catalog.exceptions import CatalogLoadError
 from ai_seller_agent.domain.models import Product
+from ai_seller_agent.infrastructure.catalog.exceptions import CatalogLoadError
 
 
 class CsvCatalogLoader:

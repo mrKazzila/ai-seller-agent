@@ -5,7 +5,7 @@ import pytest
 import structlog
 
 from ai_seller_agent.config.logging import LoggingConfig
-from ai_seller_agent.observability import setup_logging
+from ai_seller_agent.infrastructure.observability import setup_logging
 
 
 @pytest.mark.unit

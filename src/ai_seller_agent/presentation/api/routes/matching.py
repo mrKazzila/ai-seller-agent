@@ -1,13 +1,10 @@
-from typing import Annotated
-
 import structlog
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from ai_seller_agent.domain.enums import MatchStatus
-from ai_seller_agent.matching.matcher import ProductMatcher
-from ai_seller_agent.presentation.api.dependencies import get_matcher
-from ai_seller_agent.presentation.api.mappers import map_message_match_response
-from ai_seller_agent.presentation.api.schemas import (
+from ai_seller_agent.presentation.api.mappers.match import to_match_response
+from ai_seller_agent.presentation.api.routes.types import MatchMessagesDep
+from ai_seller_agent.presentation.api.schemas.match import (
     MatchRequest,
     MatchResponse,
 )
@@ -16,15 +13,21 @@ router = APIRouter(prefix="/match", tags=["Matching"])
 logger = structlog.get_logger(__name__)
 
 
-@router.post("", response_model=MatchResponse)
+@router.post("")
 def match_product(
     payload: MatchRequest,
-    matcher: Annotated[ProductMatcher, Depends(get_matcher)],
+    match_messages_uc: MatchMessagesDep,
 ) -> MatchResponse:
+    matches = match_messages_uc.execute(messages=payload.messages)
+
     results = [
-        map_message_match_response(message, matcher.match(message))
-        for message in payload.messages
+        to_match_response(
+            match.message,
+            match.result,
+        )
+        for match in matches
     ]
+
     logger.info(
         "product_match_batch_completed",
         message_count=len(results),

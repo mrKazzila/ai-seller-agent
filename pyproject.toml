@@ -24,18 +24,19 @@ dependencies = [
 dev = [
     "httpx2>=2.0.0",
     "pytest>=9.0.3",
+    "pytest-xdist>=3.8.0",
     "ruff>=0.15.12",
     "ty>=0.0.34",
 ]
 
 [project.scripts]
-agent = "ai_seller_agent.main:main"
+agent = "ai_seller_agent.entrypoints.api.__main__:main"
 
 # ==========================
 # ========= PyTest =========
 # ==========================
 [tool.pytest.ini_options]
-addopts = "-v -ra --import-mode=importlib"
+addopts = "-n 2 -v -ra --import-mode=importlib"
 testpaths = ["tests"]
 pythonpath = ["src"]
 strict_markers = true
@@ -55,7 +56,6 @@ respect-gitignore = true
 line-length = 79
 target-version = "py312"
 src = ["src"]
-extend-exclude = ["tests"]
 
 [tool.ruff.lint]
 fixable = ["ALL"]
