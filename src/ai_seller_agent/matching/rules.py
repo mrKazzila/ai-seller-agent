@@ -8,6 +8,7 @@ def has_strong_feature_conflict(
     return any(
         (
             _has_conflict(query.dimensions, product.dimensions),
+            _has_conflict(query.measurements, product.measurements),
             _has_conflict(query.thread_sizes, product.thread_sizes),
             _has_conflict(query.bit_types, product.bit_types),
             _has_conflict(query.grit_values, product.grit_values),

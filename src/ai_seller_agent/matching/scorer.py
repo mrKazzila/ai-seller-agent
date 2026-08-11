@@ -53,6 +53,7 @@ class ProductScorer:
     ) -> float:
         expected = (
             query.dimensions
+            | query.measurements
             | query.thread_sizes
             | query.bit_types
             | query.grit_values
@@ -64,6 +65,7 @@ class ProductScorer:
 
         actual = (
             product.dimensions
+            | product.measurements
             | product.thread_sizes
             | product.bit_types
             | product.grit_values
