@@ -1,4 +1,4 @@
-from ai_seller_agent.matching.features import TextFeatures
+from ai_seller_agent.infrastructure.matching.features import TextFeatures
 
 
 def has_strong_feature_conflict(

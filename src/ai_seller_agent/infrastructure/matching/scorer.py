@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from rapidfuzz import fuzz
 
 from ai_seller_agent.config.settings import MatchingSettings
-from ai_seller_agent.matching.features import TextFeatures
+from ai_seller_agent.infrastructure.matching.features import TextFeatures
 
 
 @dataclass(frozen=True, slots=True)

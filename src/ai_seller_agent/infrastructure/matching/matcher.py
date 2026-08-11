@@ -1,17 +1,17 @@
-from ai_seller_agent.catalog.service import CatalogService
 from ai_seller_agent.config.settings import MatchingSettings
 from ai_seller_agent.domain.enums import MatchStatus
 from ai_seller_agent.domain.models import (
     MatchResult,
     ProductCandidate,
 )
-from ai_seller_agent.matching.features import FeatureExtractor
-from ai_seller_agent.matching.index import ProductSearchIndex
-from ai_seller_agent.matching.normalizer import TextNormalizer
-from ai_seller_agent.matching.rules import (
+from ai_seller_agent.infrastructure.catalog.service import CatalogService
+from ai_seller_agent.infrastructure.matching.features import FeatureExtractor
+from ai_seller_agent.infrastructure.matching.index import ProductSearchIndex
+from ai_seller_agent.infrastructure.matching.normalizer import TextNormalizer
+from ai_seller_agent.infrastructure.matching.rules import (
     has_strong_feature_conflict,
 )
-from ai_seller_agent.matching.scorer import ProductScorer
+from ai_seller_agent.infrastructure.matching.scorer import ProductScorer
 
 
 class ProductMatcher:

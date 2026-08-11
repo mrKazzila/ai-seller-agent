@@ -1,5 +1,5 @@
-from ai_seller_agent.catalog.exceptions import EmptyCatalogError
 from ai_seller_agent.domain.models import Product
+from ai_seller_agent.infrastructure.catalog.exceptions import EmptyCatalogError
 
 
 class CatalogService:
