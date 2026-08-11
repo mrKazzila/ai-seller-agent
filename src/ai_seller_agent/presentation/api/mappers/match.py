@@ -6,7 +6,6 @@ from ai_seller_agent.presentation.api.schemas.match import (
 
 
 def to_match_response(
-
     message: str,
     result: MatchResult,
 ) -> MessageMatchResponse:

@@ -8,10 +8,7 @@ class InMemoryProductCatalog:
             raise EmptyCatalogError("Catalog must not be empty")
 
         self._products = products
-        self._products_by_sku = {
-            product.sku: product
-            for product in products
-        }
+        self._products_by_sku = {product.sku: product for product in products}
 
     @property
     def products(self) -> tuple[Product, ...]:

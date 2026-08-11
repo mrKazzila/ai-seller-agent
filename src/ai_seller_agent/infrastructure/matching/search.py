@@ -16,8 +16,7 @@ class TfidfProductSearch:
         self._products = tuple(products)
 
         documents = tuple(
-            normalizer.normalize(product.name)
-            for product in self._products
+            normalizer.normalize(product.name) for product in self._products
         )
 
         self._index = ProductSearchIndex(documents)

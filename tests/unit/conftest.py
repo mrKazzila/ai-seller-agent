@@ -38,6 +38,7 @@ def match_policy() -> MatchPolicy:
         candidates_limit=3,
     )
 
+
 @pytest.fixture
 def candidate_factory() -> Callable[[str, float], ProductCandidate]:
     def create_candidate(sku: str, score: float) -> ProductCandidate:
@@ -52,7 +53,6 @@ def candidate_factory() -> Callable[[str, float], ProductCandidate]:
         )
 
     return create_candidate
-
 
 
 @pytest.fixture

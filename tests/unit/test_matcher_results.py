@@ -37,14 +37,14 @@ def test_match_policy_decision(
     match_policy: MatchPolicy,
 ) -> None:
     candidates = [
-        candidate_factory(sku, score)
-        for sku, score in candidate_data
+        candidate_factory(sku, score) for sku, score in candidate_data
     ]
 
     result = match_policy.decide(candidates)
 
     assert result.status is expected_status
     assert [item.product.sku for item in result.candidates] == expected_skus
+
 
 @pytest.mark.unit
 def test_blank_message_is_not_found(
