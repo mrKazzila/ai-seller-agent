@@ -56,7 +56,6 @@ respect-gitignore = true
 line-length = 79
 target-version = "py312"
 src = ["src"]
-extend-exclude = ["tests"]
 
 [tool.ruff.lint]
 fixable = ["ALL"]
