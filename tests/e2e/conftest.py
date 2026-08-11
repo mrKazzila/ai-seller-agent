@@ -3,7 +3,7 @@ from collections.abc import Iterator
 import pytest
 from fastapi.testclient import TestClient
 
-from ai_seller_agent.application import create_app
+from ai_seller_agent.presentation.api.application import create_app
 
 
 @pytest.fixture(scope="module")

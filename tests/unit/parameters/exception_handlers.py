@@ -4,7 +4,7 @@ import pytest
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from ai_seller_agent.catalog.exceptions import (
+from ai_seller_agent.infrastructure.catalog.exceptions import (
     CatalogLoadError,
     EmptyCatalogError,
 )

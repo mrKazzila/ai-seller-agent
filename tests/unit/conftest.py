@@ -6,8 +6,8 @@ import pytest
 
 from ai_seller_agent.config.settings import MatchingSettings
 from ai_seller_agent.domain.models import Product, ProductCandidate
-from ai_seller_agent.matching.matcher import ProductMatcher
-from ai_seller_agent.observability import reset_logging
+from ai_seller_agent.infrastructure.matching.matcher import ProductMatcher
+from ai_seller_agent.infrastructure.observability import reset_logging
 
 
 @pytest.fixture

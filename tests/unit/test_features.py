@@ -1,6 +1,6 @@
 import pytest
 
-from ai_seller_agent.matching.features import FeatureExtractor
+from ai_seller_agent.infrastructure.matching.features import FeatureExtractor
 
 
 @pytest.mark.unit

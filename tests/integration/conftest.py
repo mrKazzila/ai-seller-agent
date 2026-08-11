@@ -5,7 +5,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from ai_seller_agent.application import create_app
+from ai_seller_agent.presentation.api.application import create_app
 from ai_seller_agent.domain.enums import MatchStatus
 from ai_seller_agent.domain.models import (
     MatchResult,

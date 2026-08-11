@@ -6,7 +6,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.requests import Request
 
-from ai_seller_agent.catalog.exceptions import (
+from ai_seller_agent.infrastructure.catalog.exceptions import (
     CatalogLoadError,
     EmptyCatalogError,
 )
