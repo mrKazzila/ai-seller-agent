@@ -45,6 +45,12 @@ class ProductMatcher:
         }
 
     def match(self, message: str) -> MatchResult:
+        if "<" in message and ">" in message:
+            return MatchResult(
+                status=MatchStatus.NOT_FOUND,
+                reason="Markup-like input is not a product query",
+            )
+
         query = self._normalizer.normalize(message)
 
         if not query:
