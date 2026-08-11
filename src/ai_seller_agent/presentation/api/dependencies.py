@@ -1,7 +1,7 @@
 from fastapi import Request
 
-from ai_seller_agent.catalog.service import CatalogService
-from ai_seller_agent.matching.matcher import ProductMatcher
+from ai_seller_agent.infrastructure.catalog.service import CatalogService
+from ai_seller_agent.infrastructure.matching.matcher import ProductMatcher
 
 
 def get_matcher(request: Request) -> ProductMatcher:

@@ -1,22 +1,14 @@
-from typing import Annotated
+from fastapi import APIRouter
 
-from fastapi import APIRouter, Depends
-from pydantic import BaseModel
-
-from ai_seller_agent.catalog.service import CatalogService
-from ai_seller_agent.presentation.api.dependencies import get_catalog
+from ai_seller_agent.presentation.api.routes.types import CatalogDep
+from ai_seller_agent.presentation.api.schemas.health import HealthResponse
 
 router = APIRouter(tags=["System"])
 
 
-class HealthResponse(BaseModel):
-    status: str
-    catalog_size: int
-
-
-@router.get("/health", response_model=HealthResponse)
+@router.get("/health")
 def health(
-    catalog: Annotated[CatalogService, Depends(get_catalog)],
+    catalog: CatalogDep,
 ) -> HealthResponse:
     return HealthResponse(
         status="ok",

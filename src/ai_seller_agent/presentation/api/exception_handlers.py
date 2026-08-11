@@ -4,7 +4,7 @@ import structlog
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
-from ai_seller_agent.catalog.exceptions import (
+from ai_seller_agent.infrastructure.catalog.exceptions import (
     CatalogLoadError,
     EmptyCatalogError,
 )

@@ -1,11 +1,12 @@
 from ai_seller_agent.domain.models import MatchResult
-from ai_seller_agent.presentation.api.schemas import (
+from ai_seller_agent.presentation.api.schemas.match import (
     CandidateResponse,
     MessageMatchResponse,
 )
 
 
-def map_message_match_response(
+def to_match_response(
+
     message: str,
     result: MatchResult,
 ) -> MessageMatchResponse:
